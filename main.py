@@ -1,6 +1,5 @@
 # Импортируем необходимые классы.
-import copy
-import logging
+import os
 import sqlite3
 import random
 
@@ -78,7 +77,6 @@ Users = {}
 
 
 class AllExercise:
-
     class exercise2:
         AllWords = []
         AllCorrectForms = []
@@ -125,7 +123,6 @@ class AllExercise:
             self.correct = 0
             self.wrong = 0
 
-
         def stop(self, update):
             statics = self.getStatics()
             self.end()
@@ -157,7 +154,6 @@ class AllExercise:
                 self.correct += 1
                 return "Верно!\n"
 
-
         def byMistakes(self):
             self.wrong = 0
             self.correct = 0
@@ -180,7 +176,6 @@ class AllExercise:
             wrong = self.wrong
             correct = self.correct
             return f'Ваш счёт:\nВерно поставленных ударений: {correct}\nНеверно поставленных ударений {wrong}\n'
-
 
         def getMessage(self, update):
             text = update.message.text
@@ -253,7 +248,6 @@ class AllExercise:
         def start(self, update):
             self.AllWords = []
             self.AllCorrectForms = []
-
 
             reply_keyboard = [['Начать сначала', 'по неправильным'], ['Хватит']]
             markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
@@ -382,6 +376,7 @@ class AllExercise:
             return self.exercise7
         return None
 
+
 def error(update, context):
     update.message.reply_text(f'Ошибка: {update.message.text}\n')
 
@@ -426,7 +421,7 @@ def redirection(update, context):
         if update.message.text.isdigit():
             Users[id].newExNum(int(update.message.text))
             exNum = int(update.message.text)
-            exercise = copy.copy(AllExercise().getExercise(exNum))
+            exercise = AllExercise().getExercise(exNum)
             if exercise:
                 user_exercise = exercise(update)
                 user_exercise.start(update)
@@ -436,7 +431,8 @@ def redirection(update, context):
                 user_exercise = None
             else:
                 Users[id].newExNum(0)
-                update.message.reply_text("Этого задания пока что в боте нету", parse_mode=ParseMode.HTML, reply_markup=base_markup)
+                update.message.reply_text("Этого задания пока что в боте нету", parse_mode=ParseMode.HTML,
+                                          reply_markup=base_markup)
 
         else:
             help(update, context)
@@ -450,7 +446,6 @@ def redirection(update, context):
 
             Users[id].getExercise().getAnswer(update)
             Users[id].getExercise().getQuestion(update)
-
 
 
 def main():
@@ -475,7 +470,11 @@ def main():
     # Регистрируем обработчик в диспетчере.
     dp.add_handler(text_handler)
     # Запускаем цикл приема и обработки сообщений.
-    updater.start_polling()
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(os.environ.get('PORT', 5000)),
+                          url_path='5444648065:AAFCzEZzrIO5ZLd8NYbQup2SRcofO1JLd_M',
+                          webhook_url=+ '5444648065:AAFCzEZzrIO5ZLd8NYbQup2SRcofO1JLd_M'
+                          )
 
     # Ждём завершения приложения.
     # (например, получения сигнала SIG_TERM при нажатии клавиш Ctrl+C)
