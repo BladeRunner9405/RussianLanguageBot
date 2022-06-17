@@ -473,7 +473,7 @@ def main():
     updater.start_webhook(listen="0.0.0.0",
                           port=int(os.environ.get('PORT', 5000)),
                           url_path='5444648065:AAFCzEZzrIO5ZLd8NYbQup2SRcofO1JLd_M',
-                          webhook_url=+ '5444648065:AAFCzEZzrIO5ZLd8NYbQup2SRcofO1JLd_M'
+                          webhook_url= '5444648065:AAFCzEZzrIO5ZLd8NYbQup2SRcofO1JLd_M'
                           )
 
     # Ждём завершения приложения.
@@ -482,4 +482,5 @@ def main():
 
 
 # Запускаем функцию main() в случае запуска скрипта.
-main()
+if __name__ == '__main__':
+    main()
